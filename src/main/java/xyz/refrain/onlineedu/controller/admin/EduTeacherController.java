@@ -51,9 +51,9 @@ public class EduTeacherController {
 	public R create(@Validated EduTeacherDetail detail,
 	                @RequestPart(value = "file", required = false) MultipartFile file,
 	                @RequestPart(value = "resume", required = false) MultipartFile resume) throws IOException {
-		if (Objects.isNull(file)) {
-			return RUtils.fail("头像不能为空");
-		}
+//		if (Objects.isNull(file)) {
+//			return RUtils.fail("头像不能为空");
+//		}
 		return eduTeacherService.create(detail, file, resume, TeacherStatusEnum.PASS);
 	}
 
