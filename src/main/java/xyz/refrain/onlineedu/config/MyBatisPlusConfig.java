@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan("xyz.refrain.onlineedu.mapper")
+@MapperScan({"xyz.refrain.onlineedu.mapper","xyz.refrain.onlineedu.show.mapper"})
 public class MyBatisPlusConfig {
 
 	/**

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.refrain.onlineedu.show.mapper.ArticleMapper">
+
+    <resultMap id="ArticleAll" type="xyz.refrain.onlineedu.show.domain.ArticleVO">
+        <result property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="articleDesc" column="article_desc" />
+        <result property="createUser" column="create_user" />
+        <result property="userName" column="nickname" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="enable" column="enable" />
+    </resultMap>
+    <select id="queryArticleAll" resultMap="ArticleAll">
+        SELECT a.id,a.title,a.content,a.article_desc,a.create_user,u.nickname,a.create_time,a.update_time
+        FROM article a
+        left join acl_user u on a.create_user = u.id
+        WHERE a.enable = 1
+        <if test="dateStr != null and dateStr != ''">
+            and date_format(a.create_time,'%Y年%m月') = #{dateStr}
+        </if>
+    </select>
+
+    <select id="queryArticleByUid" resultMap="ArticleAll">
+        SELECT a.id,a.title,a.content,a.article_desc,a.create_user,nickname,a.create_time,a.update_time,a.enable
+        FROM article a
+        left join acl_user u on a.create_user = u.id
+        WHERE a.create_user = #{article.createUser}
+        <if test="article.enable != null">
+            and a.enable = #{article.enable}
+        </if>
+        <if test="article.title != null and article.title != ''">
+            and a.title like "%"#{article.title}"%"
+        </if>
+    </select>
+
+    <select id="getArticleDate" resultType="xyz.refrain.onlineedu.show.domain.DateCount">
+        select date_format(create_time,'%Y年%m月') as dateStr,COUNT(*) as `count`
+        from article
+        GROUP BY date_format(create_time,'%Y年%m月')
+    </select>
+</mapper>
