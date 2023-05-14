@@ -1,11 +1,10 @@
 package xyz.refrain.onlineedu.show.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import xyz.refrain.onlineedu.model.vo.R;
+import xyz.refrain.onlineedu.show.domain.ArticleComment;
+import xyz.refrain.onlineedu.show.domain.ArticleCommentVO;
 import xyz.refrain.onlineedu.show.domain.ArticleSearchParam;
 import xyz.refrain.onlineedu.show.service.IArticleService;
 import xyz.refrain.onlineedu.utils.RUtils;
@@ -43,5 +42,21 @@ public class ArticleAppController {
     @GetMapping(value = "/{id}")
     public R getInfo(@PathVariable("id") Long id) {
         return RUtils.success("", articleService.selectArticleById(id));
+    }
+
+    /**
+     * 根据博客id获取评论
+     */
+    @GetMapping("/comment/{bid}")
+    public R getCommentByBid(@PathVariable("bid") Integer articleId) {
+        return RUtils.success("", articleService.selectCommentByBid(articleId));
+    }
+
+    /**
+     * 新增评论
+     */
+    @PostMapping("/add")
+    public R addComment(@RequestBody ArticleComment articleComment) {
+        return RUtils.success("", articleService.addCommentOne(articleComment));
     }
 }

@@ -2,12 +2,10 @@ package xyz.refrain.onlineedu.show.service;
 
 import java.util.List;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import xyz.refrain.onlineedu.show.domain.Article;
-import xyz.refrain.onlineedu.show.domain.ArticleSearchParam;
-import xyz.refrain.onlineedu.show.domain.ArticleVO;
-import xyz.refrain.onlineedu.show.domain.DateCount;
+import xyz.refrain.onlineedu.show.domain.*;
 
 /**
  * 博客Service接口
@@ -62,4 +60,8 @@ public interface IArticleService
 
 
     List<DateCount> getArticleDate();
+
+    List<Tree<Integer>> selectCommentByBid(Integer articleId);
+
+    ArticleCommentVO addCommentOne(ArticleComment articleComment);
 }

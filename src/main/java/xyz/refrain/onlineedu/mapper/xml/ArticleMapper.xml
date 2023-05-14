@@ -16,7 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="enable" column="enable" />
     </resultMap>
     <select id="queryArticleAll" resultMap="ArticleAll">
-        SELECT a.id,a.title,a.content,a.article_desc,a.create_user,u.nickname,a.create_time,a.update_time
+        SELECT a.id,a.title,a.content,a.article_desc,a.create_user,u.nickname,a.create_time,a.update_time,
+               (select count(*) from article_comment where article_id = a.id) as commentCounts
         FROM article a
         left join acl_user u on a.create_user = u.id
         WHERE a.enable = 1
@@ -29,13 +30,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT a.id,a.title,a.content,a.article_desc,a.create_user,nickname,a.create_time,a.update_time,a.enable
         FROM article a
         left join acl_user u on a.create_user = u.id
-        WHERE a.create_user = #{article.createUser}
-        <if test="article.enable != null">
-            and a.enable = #{article.enable}
-        </if>
-        <if test="article.title != null and article.title != ''">
-            and a.title like "%"#{article.title}"%"
-        </if>
+        <where>
+            <if test="article.createUser != null">
+                and a.create_user = #{article.createUser}
+            </if>
+            <if test="article.enable != null">
+                and a.enable = #{article.enable}
+            </if>
+            <if test="article.title != null and article.title != ''">
+                and a.title like "%"#{article.title}"%"
+            </if>
+        </where>
+
     </select>
 
     <select id="getArticleDate" resultType="xyz.refrain.onlineedu.show.domain.DateCount">

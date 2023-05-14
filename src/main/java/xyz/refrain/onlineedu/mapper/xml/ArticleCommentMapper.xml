@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.refrain.onlineedu.show.mapper.ArticleCommentMapper">
+
+    <resultMap id="ArticleCommentMap" type="xyz.refrain.onlineedu.show.domain.ArticleCommentVO">
+        <result property="articleId" column="article_id" />
+        <result property="id" column="id" />
+        <result property="commentUser" column="comment_user" />
+        <result property="content" column="content" />
+        <result property="parentId" column="parent_id" />
+        <result property="toUid" column="to_uid" />
+        <result property="commentType" column="comment_type" />
+        <result property="createTime" column="create_time" />
+        <result property="avatar" column="avatar" />
+        <result property="nickname" column="nickname" />
+        <result property="toNickname" column="toNickname" />
+    </resultMap>
+    <select id="selectCommentByBid" resultMap="ArticleCommentMap">
+        select ac.id,ac.article_id,ac.comment_user,ac.content,ac.parent_id,ac.to_uid,ac.comment_type,ac.create_time,um.avatar,um.nickname,
+               (select nickname from uctr_member where id = ac.to_uid) as toNickname
+        from article_comment ac
+        JOIN uctr_member um on ac.comment_user = um.id
+        where ac.article_id = #{articleId}
+        order by ac.create_time desc
+    </select>
+
+    <select id="selectCommentById" resultMap="ArticleCommentMap">
+        select ac.id,ac.article_id,ac.comment_user,ac.content,ac.parent_id,ac.to_uid,ac.comment_type,ac.create_time,um.avatar,um.nickname,
+               (select nickname from uctr_member where id = ac.to_uid) as toNickname
+        from article_comment ac
+        JOIN uctr_member um on ac.comment_user = um.id
+        where ac.id = #{id}
+    </select>
+</mapper>
